@@ -16,11 +16,11 @@ const authCheck = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: "https:///.well-known/jwks.json"
+        jwksUri: "https://yhiguchi.auth0.com/.well-known/jwks.json" // https://auth0.com/docs/jwks
     }),
     // This is the identifier we set when we created the API
-    audience: '{YOUR-API-AUDIENCE-ATTRIBUTE}',
-    issuer: "https://{YOUR-AUTH0-DOMAIN}.auth0.com/",
+    audience: 'https://yhiguchi.auth0.com/api/v2/', // https://manage.auth0.com/#/apis/5ab4f28aad647e6dd0f62b0a/test
+    issuer: "https://yhiguchi.auth0.com/",
     algorithms: ['RS256']
 });
 
