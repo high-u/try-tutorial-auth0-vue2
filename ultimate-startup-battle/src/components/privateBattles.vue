@@ -30,7 +30,7 @@
 
 <script>
 import AppNav from './AppNav';
-// import { isLoggedIn } from '../../utils/auth';
+import { isLoggedIn } from '../../utils/auth';
 import { getPrivateStartupBattles } from '../../utils/battles-api';
 
 export default {
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     isLoggedIn() {
-      // return isLoggedIn();
+      return isLoggedIn();
     },
     getPrivateStartupBattles() {
       getPrivateStartupBattles().then((battles) => {
