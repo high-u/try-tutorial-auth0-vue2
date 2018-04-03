@@ -30,23 +30,6 @@ const router = new Router({
   mode: 'history',
 });
 
-export function logout() {
-  clearIdToken();
-  clearAccessToken();
-  router.go('/');
-}
-
-export function requireAuth(to, from, next) {
-  if (!isLoggedIn()) {
-    next({
-      path: '/',
-      query: { redirect: to.fullPath },
-    });
-  } else {
-    next();
-  }
-}
-
 export function getIdToken() {
   return localStorage.getItem(ID_TOKEN_KEY);
 }
@@ -63,9 +46,16 @@ function clearAccessToken() {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
 }
 
+export function logout() {
+  clearIdToken();
+  clearAccessToken();
+  router.go('/');
+}
+
 // Helper function that will allow us to extract the access_token and id_token
 function getParameterByName(name) {
-  const match = RegExp('[#&]' + name + '=([^&]*)').exec(window.location.hash);
+  // const match = RegExp('[#&]' + name + '=([^&]*)').exec(window.location.hash);
+  const match = RegExp(`[#&]${name}=([^&]*)`).exec(window.location.hash);
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
@@ -81,11 +71,6 @@ export function setIdToken() {
   localStorage.setItem(ID_TOKEN_KEY, idToken);
 }
 
-export function isLoggedIn() {
-  const idToken = getIdToken();
-  return !!idToken && !isTokenExpired(idToken);
-}
-
 function getTokenExpirationDate(encodedToken) {
   const token = decode(encodedToken);
   if (!token.exp) { return null; }
@@ -99,4 +84,20 @@ function getTokenExpirationDate(encodedToken) {
 function isTokenExpired(token) {
   const expirationDate = getTokenExpirationDate(token);
   return expirationDate < new Date();
+}
+
+export function isLoggedIn() {
+  const idToken = getIdToken();
+  return !!idToken && !isTokenExpired(idToken);
+}
+
+export function requireAuth(to, from, next) {
+  if (!isLoggedIn()) {
+    next({
+      path: '/',
+      query: { redirect: to.fullPath },
+    });
+  } else {
+    next();
+  }
 }
